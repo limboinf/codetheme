@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="alert alert-success">
+        <p>{{ user.username }},上次登录时间为：{{ user.last_login|safe }}</p>
+    </div>
+</div>
+<div class="row">
+        <div class="col-lg-6">
+          <h2>Codetheme</h2>
+          <p><a class="btn btn-primary" href="/manage/addtheme/" role="button">发布主题</a></p>
+        </div>
+        <div class="col-lg-6">
+          <h2>Share</h2>
+          <p><a class="btn btn-primary" href="#" role="button">分享链接</a></p>
+       </div>
+
+ </div>
+{% endblock %}
