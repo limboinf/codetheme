@@ -28,7 +28,7 @@ class Theme(models.Model):
     content = models.CharField(max_length=1000, null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    add_date = models.DateTimeField(auto_now=True,auto_now_add=True)
+    add_date = models.DateTimeField(auto_now=True, auto_now_add=True)
     status = models.IntegerField(default=0, choices=TYPE)
     schedule = models.IntegerField(default=0)   # 进度
     def __unicode__(self):
@@ -52,6 +52,7 @@ class Tag(models.Model):
 
 class Share(models.Model):
     title = models.CharField(max_length=100)
+    user = models.IntegerField()
     type = models.ForeignKey(Code,null=True)
     desc = models.CharField(max_length=500,null=True)
     url = models.URLField()

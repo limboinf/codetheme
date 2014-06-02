@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row-fluid">
+			<div class="page-header">
+				<h1>编程主题 <small>所有</small></h1>
+			</div>
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                  <h3 class="panel-title">高级功能：</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="btn-group" id="codes">
+                        <button type="button" class="btn btn-default" style="margin-right: 10px;display: block" id="c_1">python</button>
+                    </div>
+                </div>
+            </div>
+			<table class="table table-striped table-bordered table-condensed">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>主题方向</th>
+						<th>状态</th>
+                        <th>进度</th>
+						<th>评论</th>
+						<th>关注</th>
+                        <th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for obj in themes %}
+				<tr class="list-users" id="theme_{{ obj.id }}">
+					<td>{{ obj.title }}</td>
+					<td>{{ obj.type.name }}</td>
+					<td>{{ obj.get_status_display }}</td>
+					<td>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ obj.schedule }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ obj.schedule }}%">
+                            </div>{{ obj.schedule }}%
+                        </div>
+                    </td>
+					<td>10人评论</td>
+                    <td>３人关注</td>
+					<td>
+						<div class="btn-group">
+							<a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">动作 <span class="caret"></span></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="/manage/theme/{{ obj.id }}/"><i class="icon-pencil"></i> 编辑</a></li>
+								<li><a href="javascript:;" onclick="delTheme({{ obj.id }})"><i class="icon-trash"></i> 删除</a></li>
+								<li><a href="javascript:;" onclick="showMore({{ obj.id }})"><i class="icon-user"></i>详细</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+                {% endfor %}
+				</tbody>
+			</table>
+
+			<a href="/manage/addtheme/" class="btn btn-success">发布新主题</a>
+		  </div>
+
+<!--hidden-->
+    {% for obj in themes %}
+        <div id="detail_{{ obj.id }}" style="display: none;width: 500px;" class="">
+        <b>主题标题：</b>
+        <p>{{ obj.title }}</p>
+        <b>主题方向</b>
+        <p><span class="label label-info">{{ obj.type.name }}</span></p>
+        <b>主体介绍：</b>
+        <blockquote><p>{{ obj.content }}</p></blockquote>
+        <b>主题标签：</b>
+        <p id="tag_{{ obj.id }}">{{ obj.tag }}</p>
+        <b>开始时间：</b>
+        <p>{{ obj.start_date|date:'Y-m-d' }}</p>
+        <b>结束时间：</b>
+        <p>{{ obj.end_date|date:'Y-m-d' }}</p>
+        <b>添加时间</b>
+        <p>{{ obj.add_date|date:'Y-m-d h:i:s' }}</p>
+        <b>状态：</b>
+        <p>{{ obj.get_status_display }}</p>
+        <b>进度：</b>
+        <p>{{ obj.schedule }}%</p>
+        </div>
+    {% endfor %}
+<!--hidden-->
+{% endblock %}

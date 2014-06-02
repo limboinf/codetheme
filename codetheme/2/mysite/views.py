@@ -4,7 +4,7 @@ from mysite.form import LoginForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from share.models import Code, Tag, Theme, Node
+from share.models import Code, Tag, Theme, Node, Share
 from mysite import ajax
 import simplejson as json
 
@@ -33,7 +33,7 @@ def login_(request):
     else:
         form = LoginForm()
     context['form'] = form
-    return render(request, 'login.html', context)
+    return render(request, 'manage/login.html', context)
 
 
 def logout_(request):
@@ -44,7 +44,14 @@ def logout_(request):
 def manage(request):
     """后台"""
     context = {}
-    return render(request, 'manage.html', context)
+    user = request.user
+    #codetheme
+    themes = Theme.objects.filter(user=user.id).order_by('-id')
+    print themes
+    share = Share.objects.filter(user=user.id).order_by('-id')
+    context['themes'] = themes
+    context['share'] = share
+    return render(request, 'manage/manage.html', context)
 
 
 @login_required(login_url='/login/')
@@ -53,13 +60,45 @@ def addtheme(request):
     context = {}
     user = request.user
     if request.method == 'POST':
-        pass
+        title = request.POST.get('title')
+        code = request.POST.get('code')
+        desc = request.POST.get('desc', '')
+        tags = request.POST.get('tags', '')
+        begin_date = request.POST.get('begin_date')
+        end_date = request.POST.get('end_date')
+        map = request.POST.get('map', '')       # 思维导图
+        code = Code.objects.get(pk=code)
+        if tags:
+            tags = json.loads(tags)
+            str_tags = []
+            for i in tags:
+                i = i.strip()
+                if i:
+                    str_tags.append(i)
+                if i and not Tag.objects.filter(name__iexact=i).exists():
+                    Tag.objects.create(name=i, user=user.id)
+
+            str_tags = json.dumps(str_tags)
+
+        if map:
+            pass
+
+        Theme.objects.create(
+            title=title,
+            user=user.id,
+            type=code,
+            tag=str_tags,
+            content=desc,
+            start_date=begin_date,
+            end_date=end_date
+        )
+        return ajax.ajax_ok()
     else:
         codes = Code.objects.filter(user=user.id)
         tags = Tag.objects.filter(user=user.id).order_by('-id')
         context['codes'] = codes
         context['tags'] = tags
-    return render(request, 'addtheme.html', context)
+    return render(request, 'manage/addtheme.html', context)
 
 
 @login_required(login_url='/login/')
@@ -77,13 +116,35 @@ def addcode(request):
 def addtag(request):
     """添加标签"""
     user = request.user
+
+
+
+@login_required(login_url='/login/')
+def themeManage(request):
+    """Theme Manage"""
+    context = {}
+    user = request.user
+    if id:
+        themes = Theme.objects.filter(user=user.id).order_by('-id')
+        context['themes'] = themes
+        return render(request, 'manage/thememanage.html', context)
+
+
+@login_required(login_url='/login/')
+def themeView(request, id=None):
+    """Theme manage view."""
+    context = {}
+    user = request.user
+    if id:
+        theme = Theme.objects.get(pk=id)
+        context['themes'] = theme
+        return render(request, 'manage/themeview.html', context)
+
+
+@login_required(login_url='/login/')
+def deltheme(request):
+    """删除主题"""
     if request.method == 'POST':
-        tags = request.POST.get('tags', '')
-        if tags:
-            tag = json.dumps(tags)
-        if not Code.objects.filter(name__iexact=code).exists():
-            c_id = Code.objects.create(user=user.id, name=code).id
-            return ajax.ajax_ok(c_id)
-
-
-
+        id = request.POST.get('id')
+        Theme.objects.filter(id=id).delete()
+        return ajax.ajax_ok()

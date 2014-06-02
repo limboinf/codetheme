@@ -47,15 +47,17 @@ function choiceCode(){
 
 //日期范围选择
 function choiceDate(){
-    $('#begin_date').calendar({ maxDate:'#end_date' });
-    $('#end_date').calendar({ minDate:'#begin_date' });
+    if($('#begin_date').length && $('#end_date').length){
+        $('#begin_date').calendar({ maxDate:'#end_date' });
+        $('#end_date').calendar({ minDate:'#begin_date' });
 
-    $('#begin_date').bind('click',function(){
-        $(this).calendar()
-    })
-    $('#end_date').bind('click',function(){
-        $(this).calendar()
-    })
+        $('#begin_date').bind('click',function(){
+            $(this).calendar()
+        })
+        $('#end_date').bind('click',function(){
+            $(this).calendar()
+        })
+    }
 
 }
 
@@ -81,65 +83,11 @@ function getTags(){
 
 //设置节点
 function setTree(){
-    var to = false;
-    $('#demo_q').keyup(function () {
-        if(to) { clearTimeout(to); }
-        to = setTimeout(function () {
-            var v = $('#demo_q').val();
-            $('#jstree_demo').jstree(true).search(v);
-        }, 250);
-    });
 
-    $('#jstree_demo')
-        .jstree({
-            "core" : {
-                "animation" : 0,
-                "check_callback" : true,
-                "themes" : { "stripes" : true },
-                'data' : [
-                       { "id" : "map1", "parent" : "#", "text" : "思路导航" },
-                       { "id" : "map2", "parent" : "map1", "text" : "NO1.概要" },
-                       { "id" : "map3", "parent" : "map1", "text" : "...." },
-                    ]
-            },
-            "types" : {
-                "#" : { "max_children" : 1, "max_depth" : 4, "valid_children" : ["root"] },
-                "root" : { "valid_children" : ["default"] },
-                "default" : {"icon" : "glyphicon glyphicon-file","valid_children" : ["default","file"] },
-                "file" : { "icon" : "glyphicon glyphicon-file", "valid_children" : [] }
-            },
-            "plugins" : [ "contextmenu", "dnd", "state", "types", "wholerow" ]
-        });
-}
+};
 
-// 添加节点
-function demo_create() {
-    var ref = $('#jstree_demo').jstree(true);
-    var sel = ref.get_selected();
-    if(!sel.length) {
-        return false;
-    }
-    sel = sel[0];
-    sel = ref.create_node(sel, {"type":"default"});
-    if(sel) {
-        ref.edit(sel);
-    }
-};
-//　重命名节点
-function demo_rename() {
-    var ref = $('#jstree_demo').jstree(true),
-        sel = ref.get_selected();
-    if(!sel.length) { return false; }
-    sel = sel[0];
-    ref.edit(sel);
-};
-//　删除节点
-function demo_delete() {
-    var ref = $('#jstree_demo').jstree(true),
-        sel = ref.get_selected();
-    if(!sel.length) { return false; }
-    ref.delete_node(sel);
-};
+
+
 
 //发布编程主题
 function addTheme(){
@@ -153,20 +101,59 @@ function addTheme(){
         if(!code.length){
             return alert('你需要明确一个方向')
         }
-        var code = code.text()
-        alert(code)
+        var code = code.attr('id').split('_')[1];
         // 简介
         var desc = $('#desc').val();
+        if(desc.length>1000){
+            return alert('哥们，你也写得太多了吧。');
+        }
         //　获取标签转换成字符串
-        var tags = getTags()
-        alert(tags.stringify)
+        var tags = getTags();
+        tags = JSON.stringify(tags);
+
         //日期时间
         var begin_date = $('#begin_date').val();
         var end_date = $('#end_date').val();
+        var d1 = new Date(begin_date.replace(/\-/g, "\/"));
+        var d2 = new Date(end_date.replace(/\-/g, "\/"));
+        if(begin_date!=""&&end_date!=""&&d1 >d2){
+            return alert("开始时间不能大于结束时间！");
+         }
         //学习思路
-
+        var map = ''
         // 保存标签
-        var url = '/manage/addcode/';
-        $.post(url,)
+        var url = '/manage/addtheme/';
+        datas = {'title': title,'code':code,'desc':desc,'tags':tags,'begin_date':begin_date,'end_date':end_date,'map':map}
+        setBtn('off',$('#submit'),'发布主题');     //禁用按钮
+        $.post(url,datas,function(data){
+            var r = data.evalJson();
+            if(r.response == 'ok'){
+                location.href='/manage/';
+            }else{
+                alert('额..出错了!');
+            }
+        })
   });
 }
+// 删除theme
+function delTheme(id){
+    if(confirm('确定要删除它吗？')){
+        var url = '/manage/theme/del/';
+        $.post(url,{'id':id}, function (data) {
+            var r = data.evalJson();
+            if(r.response == 'ok'){
+                $('#theme_'+id).remove();
+            }else{
+                alert('Oh,fuck!报错了')
+            }
+        })
+    }
+}
+
+//　查看更多主题
+function showMore(id){
+   var tags = $('#tag_'+id).text().evalJson();
+   $('#tag_'+id).text(tags);
+   $.dialog({title: '主题详情',lock: true, skin: 'white',width:'800px', content: $('#detail_'+id).html()});
+}
+
