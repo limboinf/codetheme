@@ -40,13 +40,13 @@ DATABASES = {
 
 # 微博登陆
 URL = 'http://codetheme.sinaapp.com'
-APP_KEY = '655048079'
-APP_SERCET = '5e0080b0a97c01107decade955f06941'
+APP_KEY = '****'   # 你的
+APP_SERCET = '****' # 你的
 CALLBACK_URL = URL+'/login/weibo_check/'
 
 # 七牛云存储
-QINIU_ACCESS_KEY = 'aTXUDE1Gz3MMsem2GH5s_nk4XCLuRYiz_XAMkkjP'
-QINIU_SECRET_KEY = 'NUpZChuUdkMnzi7RyJGaIq2OyffSzaVzLxjxqJz0'
+QINIU_ACCESS_KEY = '****'   # 你的
+QINIU_SECRET_KEY = '****'   # 你的
 QINIU_BUCKET_NAME = 'codetheme'
 QINIU_DOMAIN = 'codetheme.qiniudn.com'  # 域名
 
