@@ -1,0 +1,101 @@
+{% extends 'base_index.html' %}
+{% block content %}
+{% if is_owner %}
+<div class="panel panel-default">
+  <div class="panel-heading">用户信息</div>
+  <div class="panel-body">
+    <ul class="media-list">
+      <li class="media">
+        <p class="pull-left">
+          <a href="/manage/user/set_avatar/" title="点击修改头像">
+              <img class="media-object img-circle" src="{{ user.avatar }}" width="150" height="150" >
+          </a>
+
+        </p>
+        <div class="media-body">
+          <h4 class="media-heading">{{ user.username }}上次登陆时间:{{ user.last_login|date:'Y-m-d H:i:s' }}</h4>
+             <hr/>
+          <p>用户名: <span id="us">{{ user.username }}</span>&nbsp;&nbsp;[<a href="javascript:;" onclick="changeUser(0)">更换</a>]</p>
+          {% if user.type != 1 %}
+             <p>邮箱：<span id="email">{{ user.email }}</span>&nbsp;&nbsp;[<a href="javascript:;" onclick="changeUser(1)">更换</a>]</p>
+          {% endif %}
+          <p>性别：<span id="sex">{% if user.sex == 1 %}男{% else %}女{% endif %}</span>&nbsp;&nbsp;[<a href="javascript:;" onclick="changeUser(2)">更换</a>]</p>
+          <p>个人站点:<span id="url"><a href="{{ user.url|default:"" }}">{{ user.url|default:"" }}</a></span>&nbsp;&nbsp;<a href="javascript:;" onclick="changeUser(3)">{% if user.url %}[更换]{% else %}[添加]{% endif %}</a></p>
+          <div>个人简介：&nbsp;<a href="javascript:;" id="changeDesc" onclick="changeUser(4)">{% if user.desc %}[更改]{% else %}[添加]{% endif %}</a>
+              {% if user.desc %}<p id="desc" class="small_hr">{{ user.desc }}</p>{% else %}{% endif %}
+          </div>
+         </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+{% else %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">Ta的用户信息</div>
+  <div class="panel-body">
+    <ul class="media-list">
+      <li class="media">
+        <p class="pull-left">
+          <a href="javascript:;" title="点击修改头像">
+              <img class="media-object img-circle" src="{{ us.avatar }}" width="150" height="150" >
+          </a>
+            <br/>
+              <a href="javascript:;" class="label label-success" {% if not user.is_authenticated %} data-toggle="modal"  data-target="#myModal" {% else %} onclick="loveUser({{ us.id }}, this)" {% endif %}>{% if loved %}取消关注{% else %}加关注{% endif %}</a>&nbsp;&nbsp;
+              <a href="javascript:;" class="label label-info" {% if not user.is_authenticated %} data-toggle="modal"  data-target="#myModal"{% else %} data-toggle="modal"  data-target="#msSend" {% endif %}>发私信</a>
+            <input type="hidden" id="who" value="{{ id }}"/>
+        </p>
+        <div class="media-body">
+            <hr/>
+          <p>用户名: <span id="us">{{ us.username }}</span></p>
+          <p>性别：<span id="sex">{% if us.sex == 1 %}男{% else %}女{% endif %}</span></p>
+          <p>个人站点:<span id="url"><a href="{{ us.url|default:"" }}">{{ us.url|default:"" }}</a></span>&nbsp;&nbsp;<a href="javascript:;" onclick="changeUser(3)"></a></p>
+          <div>个人简介：&nbsp;<a href="javascript:;" id="changeDesc" onclick="changeUser(4)"></a>
+              {% if us.desc %}<p id="desc" class="small_hr">{{ us.desc }}</p>{% else %}{% endif %}
+          </div>
+         </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+{% endif %}
+
+<!--最新动态-->
+<div class="panel panel-default">
+  <div class="panel-heading">最新动态</div>
+  <div class="panel-body">
+<div class="bs-example bs-example-tabs">
+      <ul id="myTab" class="nav nav-tabs">
+        <li class=""><a href="#userTheme" data-toggle="tab">主题</a></li>
+        <li class=""><a href="#userShare" data-toggle="tab">分享</a></li>
+        <li class=""><a href="#useryoulove" data-toggle="tab">关注的人</a></li>
+        <li class=""><a href="#userloveyou" data-toggle="tab">Fans</a></li>
+
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade" id="userTheme">
+            <p class="loading"></p>
+        </div>
+        <div class="tab-pane fade active in" id="userShare">
+            <p class="loading"></p>
+        </div>
+        <div class="tab-pane fade" id="useryoulove">
+            <p class="loading"></p>
+        </div>
+        <div class="tab-pane fade" id="userloveyou">
+            <p class="loading"></p>
+        </div>
+      </div>
+    </div>
+ </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="/site_media/js/manage/user.js"></script>
+    <script>
+    var UID = {{ id }}
+    </script>
+{% endblock %}

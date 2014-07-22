@@ -1,0 +1,33 @@
+{% load pagination_tags %}
+<!--热门主题-->
+{% autopaginate comments 60 %}
+
+{% for obj in comments %}
+<div class="media">
+  <a class="pull-left" href="/manage/user/{{ obj.user.id }}/">
+    <img class="media-object img-circle" src="{{ obj.user.avatar }}" width="60" height="60">
+  </a>
+  <div class="media-body">
+      <div class="caption">
+        <p>
+            <b>{{ obj.user.username }}</b>&nbsp;&nbsp;&nbsp;<span style="color: #999; font-size: 12px;">{{ obj.add_date|date:'Y-m-d H:i:s' }}</span>
+            <span class="text-info" style="float: right"><a href="javascript:;" onclick="reply({{ obj.user.id }}, '{{ obj.user.username }}')" class="label label-warning">回复</a>&nbsp;&nbsp;{{ forloop.counter }}楼</span>
+       </p>
+       <div>{{ obj.content_show|safe }}</div>
+      </div>
+    </div>
+
+  </div>
+{% empty %}
+    <small>暂无评论</small>
+{% endfor %}
+
+    {% paginate %}
+
+
+<script>
+window.onload=function(){
+    $('#countComment').text({{ counts|default:0 }});//多少条回复
+
+}
+</script>

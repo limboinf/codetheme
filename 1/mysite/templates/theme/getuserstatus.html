@@ -1,0 +1,83 @@
+{% load pagination_tags %}
+{% load mytags %}
+{% if type == 1 %}          {# 主题 #}
+    {% autopaginate theme 30 %}
+    <div class="panel-body">
+    {% for obj in theme %}
+        <p><a href="/codetheme/{{ obj.id }}/">{{ obj.title }}</a></p>
+    {% empty %}
+        <br/>
+        <p class="alert alert-warning">暂时没有发布过编程主题</p>
+    {% endfor %}
+    </div>
+    {% paginate %}
+
+{% elif type == 2 %}        {# 分享 #}
+    {% autopaginate share 30 %}
+    <div class="panel-body">
+    {% for obj in share %}
+        <p> <a href="{{ obj.url }}" target="_blank">{{ obj.title }}</a>&nbsp;&nbsp;&nbsp;
+            {% if user.is_authenticated %}{% if user.id == obj.user %}<a class="label label-danger" href="javascript:;" onclick="delshare({{ obj.id }}, this)">删除</a>{% endif %}{% endif %}
+        </p>
+    {% empty %}
+        <br/>
+        <p class="alert alert-warning">暂时没有分享过链接</p>
+    {% endfor %}
+    </div>
+    {% paginate %}
+    <script>
+        function delshare(id,elem){
+            if(confirm('确定删除吗？')){
+                $.post('/manage/share/del/', {'id':id}, function (data) {
+                    var r = data.evalJson();
+                    if(r.response == 'ok'){
+                        $(elem).parent().remove();
+                    }else{
+                        alert('Oh，Fuck bug.');
+                    }
+                })
+            }
+        }
+    </script>
+{% elif type == 3 %}     {# 用户的关注者 #}
+    {% autopaginate us 30 %}
+    {% for obj in us %}
+         <!--个人用户信息-->
+        <div class="media">
+          <a class="pull-left" href="/manage/user/{{ obj.getUobj.id }}/">
+            <img class="media-object img-circle" width="80" height="80" src="{{ obj.getUobj.avatar }}">
+          </a>
+          <div class="media-body">
+            <h4 class="media-heading">{{ obj.getUobj.username }}</h4>
+          </div>
+            <small>{% if obj.url %}网站：{{ obj.getUobj.url }}{% endif %}</small>
+            <p><small>{% if obj.url %}个人简介：{{ obj.getUobj.desc|cut_title:"100" }}{% endif %}</small></p>
+        </div>
+    {% empty %}
+            <br/>
+            <p class="alert alert-warning">谁都没有关注</p>
+    {% endfor %}
+    {% paginate %}
+{% elif type == 4 %}   {# 用户的粉丝 #}
+    {% autopaginate fans 30 %}
+        {% for obj in fans %}
+         <!--个人用户信息-->
+        <div class="media">
+          <a class="pull-left" href="/manage/user/{{ obj.user.id }}/">
+            <img class="media-object img-circle" width="80" height="80" src="{{ obj.user.avatar }}">
+          </a>
+          <div class="media-body">
+            <h4 class="media-heading">{{ obj.user.username }}</h4>
+          </div>
+            <small>{% if obj.user.url %}网站： <a href="{{ obj.user.url }}">{{ obj.user.url }}</a> {% endif %}</small>
+            <p><small>{% if obj.user.url %}个人简介：{{ obj.user.desc|cut_title:"100" }}{% endif %}</small></p>
+        </div>
+        {% empty %}
+            <br/>
+            <p class="alert alert-warning">暂无Fans</p>
+        {% endfor %}
+
+    {% paginate %}
+{% endif %}
+
+

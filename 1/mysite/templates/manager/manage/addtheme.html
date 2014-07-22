@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% block css %}
+    <link href="/site_media/lhgcalendar/skins/lhgcalendar.css" rel="stylesheet">
+    <link href="/site_media/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="/site_media/css/pygments-css-master/emacs.css/" rel="stylesheet">
+    <link href="/site_media/wmd/wmd.css/" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<div class="row">
+        <form class="form-signin2" role="form" id="themeform" action="/manage/addtheme/" method="post">
+         {% csrf_token %}
+            <h2 class="form-signin-heading">发布编程主题</h2>
+            <p><b>主题名称：</b></p>
+            {{ form.title }}
+            <p><b>选择方向：</b></p>
+            {{ form.type }}
+            <div class="btn-group" id="codes">
+               {% for obj in codes %}
+                <button type="button" class="btn btn-default" style="margin-right: 10px;display: block" id="c_{{ obj.id }}">{{ obj.name }}</button>
+               {% endfor %}
+               <input type="button" class="btn btn-info btn-sm" onclick="addCode(this)" style="margin-right: 10px;display: block" value="添加分类">
+            </div>
+            <p></p>
+
+            <div class="panel panel-default">
+                  <div class="panel-heading"><b>你的学习思路？：</b></div>
+                  <div class="panel-body">
+                    {{ form.content }}
+                  </div>
+            </div>
+              <!--预览-->
+              <div class="panel panel-default" id="prew_box">
+                  <div class="panel-heading">内容即时预览</div>
+                  <div class="panel-body">
+                    <div id="prew_c"></div>
+                  </div>
+              </div>
+
+            <p><b>添加标签：</b></p>
+            <div>
+                <input type="text" id="yourtags" data-role="tagsinput" placeholder="add Tag,Enter" />
+                {% if tags %}<p id="tags_">已存在的标签：{% for obj in tags %}<span class="label label-primary" onclick="addIt('{{ obj.name }}')">{{ obj.name }}</span>&nbsp;{% endfor %}</p>{% endif %}
+            </div>
+            <input type="hidden" name="id_tag" value=""/>
+            <p class="col-md-6" style="padding-left: 0px;">开始时间：{{ form.start_date }}</p>
+            <p class="col-md-6">截止时间：{{ form.end_date }}</p>
+            <p></p><br/><br/><br/>
+            <input type="hidden" name="edit_or_creat" value="{{ is_edit }}" />
+            <a href="javascript:;" id="submit" class="btn btn-lg btn-primary btn-block"  data-loading-text="正在加载...">发　布</a>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+{% block js %}
+    <script src="/site_media/lhgcalendar/lhgcalendar.min.js"></script>
+    <script src="/site_media/js/main.js"></script>
+    <script src="/site_media/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="/site_media/wmd/wmd.js"></script>
+    <script src="/site_media/wmd/showdown.js"></script>
+    <script>
+    var IS_EDIT = {{ is_edit|default:0 }};
+    $(function(){
+        $('#prew_c').append($('.wmd-panel:last'));
+        $('#id_type').hide();
+        if(IS_EDIT == 1){ // 编辑状态
+            var type = $('#id_type').val();
+            $('#c_'+type).addClass('btn btn-success');
+            $('#tags_').children('span').each(function(){
+                $(this).bind('click', addIt($(this).text()))
+            })
+        }
+    })
+    </script>
+{% endblock %}

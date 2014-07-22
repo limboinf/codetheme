@@ -1,0 +1,50 @@
+{% extends 'base_index.html' %}
+{% load pagination_tags %}
+{% load mytags %}
+{% block content %}
+<!--热门主题-->
+    <h3 class="text-center text-danger">所有标签为: <code>{{ tagname }}</code>的主题</h3>
+    <br/>
+        <div class="row">
+        {% autopaginate themes %}
+        {% for obj in themes %}
+        <div class="media">
+          <a class="pull-left" href="/codetheme/user/{{ obj.theme.getUser.id }}/">
+            <img class="media-object img-circle" src="{{ obj.theme.getUser.avatar }}" width="80" height="80">
+          </a>
+          <div class="media-body">
+             <div class="thumbnail {% if obj.theme.status == 1 %}warning{% elif obj.theme.status == 2 %}success{% endif %}">
+              <div class="caption">
+                <p><!--标题.类别-->
+                    <strong>
+                        <a href="/codetheme/{{ obj.theme.id }}/">{{ obj.theme.title }}</a>
+                        <a href="/codetheme/type/{{ obj.theme.type }}/" class="label label-warning navbar-text navbar-right">{{ obj.theme.getType.name }}</a>
+                    </strong>
+                </p>
+                <small>{{ obj.theme.summary|cut_title:'200' }}</small>
+                <p class="small_hr">
+                    作者：<a href="/codetheme/user/{{ obj.theme.getUser.id }}/">{{ obj.theme.getUser.username }}</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;热度：{{ obj.theme.counts }}℃
+                    &nbsp;&nbsp;&nbsp;&nbsp;关注度：{{ obj.theme.getLove }}
+                    {% if obj.theme.getTags %}&nbsp;&nbsp;标签：{% for i in obj.theme.getTags %}<a href="/codetheme/tag/{{ i.tag.id }}/" class="label label-danger small">{{ i.tag.name }}</a> {% endfor %}{% endif %}
+                    &nbsp;&nbsp;&nbsp;&nbsp;关注：
+                    <a class="{% if user.is_authenticated and user.id in obj.theme.getLoveObj %}btn btn-success btn-xs{% else %}btn btn-warning btn-xs{% endif %}" {% if user.is_authenticated %}onclick="LoveIt({{ obj.theme.id }}, this)"{% else %} data-toggle="modal"  data-target="#myModal"{% endif %}>
+                          <span class="glyphicon glyphicon-star"></span>(<span id="love_{{ obj.theme.id }}">{{ obj.theme.getLove }}</span>人)
+                    </a>
+
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {% endfor %}
+        </div>
+    {% paginate %}
+
+    {% endblock %}
+
+{% block js %}
+<script src="/site_media/js/index.js"></script>
+{% endblock %}

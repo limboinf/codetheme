@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="form-signin2" role="form" action="/manage/user/admin/sendMs/" method='post'>{% csrf_token %}
+        <h2 class="form-signin-heading">发布系统公告</h2>
+        {{ form.as_p }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">确 定</button>
+      </form>
+{% endblock %}

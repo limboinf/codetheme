@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for obj in signal %}
+<div class="media {% if obj.status == 0 %}alert-danger{% else %}alert-info{% endif %}" style="padding: 8px;" id="ms_{{ obj.id }}">
+  <a class="pull-left" href="#">
+    <img class="media-object img-circle" src="{{ obj.user.avatar }}" width="60" height="60">
+  </a>
+  <div class="media-body">
+    <h5 class="media-heading">
+        {% if obj.type == 0 %}系统发来的消息：
+        {% elif obj.type == 1 %}<a href="/manage/user/{{ obj.user.id }}/">{{ obj.user.username }}</a> 在 <a href="/codetheme/{{ obj.getObj.id }}/"></a>{{ obj.getObj.title }} 中回复了你
+        {% elif obj.type == 2 %}<a href="/manage/user/{{ obj.user.id }}/">{{ obj.user.username }}</a> 给你发来了私信
+        {% elif obj.type == 3 %}<a href="/manage/user/{{ obj.user.id }}/">{{ obj.user.username }}</a> 关注了你哦
+        {% elif obj.type == 4 %}<a href="/manage/user/{{ obj.user.id }}/">{{ obj.user.username }}</a> 关注了你发布的主题： <a href="/codetheme/{{ obj.getObj.id }}/"></a>{{ obj.getObj.title }}
+        {% endif %}
+        &nbsp;&nbsp;{{ obj.add_date|date:'Y-m-d H:i:s' }}
+        {% if obj.status == 0 %}&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="hasRead({{ obj.id }}, this)" class="label label-warning">标记为已读</a>{% endif %}
+        {% if obj.type == 2 %}&nbsp;&nbsp;&nbsp;<a href="javascript:;" data-toggle="modal"  data-target="#msSend" onclick="sendms({{ obj.user.id }})" class="label label-info">回复</a>{% endif %}
+        &nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="delMs({{ obj.id }})" class="label label-danger">删除</a>
+    </h5>
+    <p class="small_hr">{{ obj.title }}</p>
+  {% if obj.type == 2 %}
+    <div class="well well-sm">{{ obj.content }}</div>
+  {% endif %}
+  </div>
+</div>
+{% empty %}
+    <p class="alert alert-warning">暂无消息</p>
+{% endfor %}
+    <input type="hidden" id="who" value=""/>
+{% endblock %}
+
+{% block js %}
+    <script src="/site_media/js/manage/user.js"></script>
+{% endblock %}

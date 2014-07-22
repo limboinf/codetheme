@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="alert alert-success">
+    <h1>操作成功</h1>
+    <p><em id="second">3</em>秒后自动跳转首页……</p>
+    <p>
+      <a class="btn btn-lg btn-primary" href="{{ req_path }}" role="button">点击返回.&nbsp;&raquo;</a>
+    </p>
+    </div>
+{% endblock %}
+{% block js %}
+<script>
+$(function(){
+    WaitDo();
+})
+var WaitTime = 3; //等待的时间，单位秒
+function WaitDo(){
+     if(WaitTime > 0){
+         $('#second').text(WaitTime);
+         WaitTime --;
+         setTimeout("WaitDo()",1000);
+     }else{
+         location.href = '/';
+     }
+}
+</script>
+{% endblock %}

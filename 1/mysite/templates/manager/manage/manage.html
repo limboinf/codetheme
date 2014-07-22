@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load mytags %}
+{% block content %}
+<div class="row">
+    <div class="media alert alert-warning">
+      <a class="pull-left" href="#">
+        <img class="media-object img-thumbnail" src="{{ user.avatar }}" width="100" height="100" alt="{{ user.username }}">
+      </a>
+      <div class="media-body">
+        <h4 class="media-heading">本站第{{ user.id }}位会员</h4>
+        <p><b>昵称：{{ user.username }}</b><p>
+        <p><b>被关注：0位</b>&nbsp;&nbsp;&nbsp;&nbsp;<b>关注者：1位</b><p>
+        <p>上次登录时间为：{{ user.last_login|date:'Y-m-d H:i:s' }}</p>
+        <p class="small"><a href="/manage/user/{{ user.id }}/">编辑个人资料</a> &nbsp;|&nbsp;<a href="/manage/user/pwd/">修改密码</a>&nbsp;|&nbsp;<a href="/manage/user/set_avatar/">修改头像</a>&nbsp;|&nbsp;<a href="/manage/user/ms/">消息</a>{% if user.is_admin %}&nbsp;|&nbsp;<a href="/manage/user/admin/sendMs/">发布系统公告</a>{% endif %}</p>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+        <div class="row">
+            <div class="col-md-6">
+                <p><a href="/manage/addtheme/" class="btn btn-warning">发布新主题</a></p>
+                <p>
+                    <a href="/manage/themeManage/">我的主题</a>&nbsp;&nbsp;|&nbsp;&nbsp; <a href="javascript:;">我所关注的主题</a>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p><a href="/manage/share/add/" class="btn btn-danger">发布分享链接</a></p>
+                <p>
+                    <a href="/manage/share/list/">我的分享</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

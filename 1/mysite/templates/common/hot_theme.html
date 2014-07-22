@@ -1,0 +1,11 @@
+{% load mytags %}
+{% for obj in hottheme %}
+<p><span class="label{% if forloop.first %} label-danger{% elif forloop.counter == 2 %} label-warning{% elif forloop.counter == 3 %} label-info{% else %} label-default{% endif %}">{{ forloop.counter }}</span>&nbsp;&nbsp;
+    <a href="/codetheme/{{ obj.id }}/" title="{{ obj.title }}">{{ obj.title|cut_title:'26' }}</a>
+</p>
+{% endfor %}
+<script>
+    $(function(){
+        $('#hot_month').text({{ month }});
+    })
+</script>

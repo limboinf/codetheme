@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <br/>
+    <img style="margin-left: 50px;" src="{{ user.avatar|default:'http://pic.cnitblog.com/avatar/a365834.jpg?id=25180446' }}" alt="{{ user.username }}" class="img-thumbnail">
+    </div>
+    <div class="col-md-4">
+        <form role="form" action="{% url 'setAvatar' %}" method='post' enctype="multipart/form-data">{% csrf_token %}
+            <h2 class="form-signin-heading">修改头像</h2>
+            {{ form.as_p }}
+            <p class="small" style="color: #c0a782">限小于1Mb，格式为jpg,png的图片……</p>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" data-loading-text="正在加载...">保 存</button>
+        </form>
+    </div>
+</div>
+    <br/>
+<div class="alert alert-warning">
+<h4>或者选择精选网站默认头像：</h4>
+<div class="row">
+  {% for obj in pic %}
+        <div class="thumbnail" style="float: left">
+          <img src="{{ obj }}" width="150" height="150" class="img-circle">
+          <div class="caption">
+           <a href="javascript:;" onclick="choicePic('{{ obj }}')" class="btn btn-primary btn-xs" role="button">选我</a>
+          </div>
+        </div>
+   {% endfor %}
+</div>
+</div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    function choicePic(url){
+        $.post('/manage/user/choice_avatar/', {'url':url}, function(data){
+            if(data == 'ok'){
+                alert('更换成功');
+                location.reload();
+            }else{
+                alert('Oh fuck.系统有误!');
+            }
+        })
+    }
+    </script>
+{% endblock %}

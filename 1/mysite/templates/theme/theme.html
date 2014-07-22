@@ -1,0 +1,159 @@
+{% extends 'base_index.html' %}
+{% load mytags %}
+{% load markup %}
+{% block css %}
+  <link id="jqueryui_191" rel="stylesheet" type="text/css" class="library" href="http://lib.sinaapp.com/js/jquery-ui/1.9.2/themes/smoothness/jquery-ui.css">
+
+    <link href="/site_media/lhgcalendar/skins/lhgcalendar.css" rel="stylesheet">
+    <link href="/site_media/css/pygments-css-master/emacs.css/" rel="stylesheet">
+    <link href="/site_media/wmd/wmd.css/" rel="stylesheet">
+    <link href="/site_media/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+
+
+{% endblock %}
+{% block content %}
+
+<!--热门主题-->
+<div class="panel panel-default">
+  <div class="panel-heading">
+      <ul class="media-list">
+      <li class="media">
+        <a class="pull-right" href="/codetheme/user/{{ theme.getUser.id }}/">
+          <img class="media-object" src="{{ theme.getUser.avatar }}" width="60"  height="60" class="img-responsive" alt="{{ theme.getUser.username }}">
+        </a>
+        <div class="media-body">
+          <h3 class="media-heading">{{ theme.title }}</h3>
+            <hr style="margin: 10px 0;" />
+            <p class="small text-muted">
+              <a href="/manage/user/{{ theme.getUser.id }}/">{{ theme.getUser.username }}</a>
+              发布于 {{ theme.add_date|fun }} &nbsp;&nbsp;
+              持续热度：{{ theme.counts }}℃&nbsp;&nbsp;
+              类别：<a href="/codetheme/type/{{ theme.type}}/" class="label label-warning small">{{ theme.getType.name }}</a>
+              {% if theme.getTags %}&nbsp;&nbsp;标签：{% for i in theme.getTags %}<a href="/codetheme/tag/{{ i.tag.id }}/" class="label label-danger small">{{ i.tag.name }}</a> {% endfor %}{% endif %}
+
+            </p>
+            <!--进度-->
+            <p>
+              <label for="amount">完成率：</label>
+              <span id="amount"></span>
+            </p>
+            <div class="row">
+                <div class="col-md-11"><div id="blue"></div></div>
+                <div class="col-md-1"><a href="javascript:;" class="label label-info" {% if user.is_authenticated and user.id != theme.getUser.id %} data-toggle="modal"  data-target="#noMaser"{% elif user.id == theme.getUser.id %} onclick="changeSchedule({{ theme.id }})"{% else %} data-toggle="modal"  data-target="#myModal"{% endif %}>更改</a></div>
+            </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="panel-body">
+    {{ theme.content_show }}
+  </div>
+  {% if theme.is_great %}
+    <div class="alert alert-warning" style="padding: 6px; font-size: 13px;"><span class="glyphicon glyphicon-fire"></span>&nbsp;&nbsp;该主题已被选为<a href="/codetheme/hot/">精华主题</a></div>
+  {% endif %}
+</div>
+<!---分享--->
+<div class="small_hr">
+<div class="bshare-custom"><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到豆瓣" class="bshare-douban"></a><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到Google书签" class="bshare-bgoogle"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-sharethis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=2f6eec21-cd56-4ee3-b11f-de1cfda7e628&amp;pophcol=1&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+</div>
+
+
+<!--加载评论-->
+    <hr/>
+<p class="alert alert-info">评论：<span id="countComment"></span>条</p>
+<div class="panel panel-default">
+  <div class="panel-body" id="comment"></div>
+</div>
+
+{% if not user.is_authenticated %}
+<P class="alert alert-danger">登陆后您就可以畅所欲言啦！ <a href="/login/" target="_blank" class="btn btn-danger">登录</a>&nbsp;&nbsp;<a href="/register/" target="_blank" class="btn btn-info">注册</a></P>
+{% else %}
+    <form class="" role="form" action="{{ request.path }}" method='post'>{% csrf_token %}
+        {{ form.as_p }}
+        <input type="hidden" name="tid" value="{{ theme.id }}"/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">提交评论</button>
+     </form>
+{% endif %}
+<p class="small_hr">
+    <p><b>发帖指南：</b></p>
+    <p>1.基于Markdown语法，可预览，详见 <a href="http://wowubuntu.com/markdown/" target="_blank">这里</a></p>
+    <p>2.两个回车表示换行</p>
+    <p>3.空四个即可输入代码</p>
+    <p>4.其他操作看输入框图标即可</p>
+</p>
+{% endblock %}
+
+
+
+{% block side %}
+<!--最近加入的用户-->
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">相关主题<small style="float: right"><a href="#">more</a></small></h3>
+  </div>
+  <div class="panel-body" id="recent_user">
+    <p>提取标题中文分词，类型，标签，然后汇总成相关主题</p>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="http://lib.sinaapp.com/js/jquery-ui/1.9.2/jquery-ui.min.js"></script>
+    <script src="/site_media/wmd/wmd.js"></script>
+    <script src="/site_media/wmd/showdown.js"></script>
+    <script>
+  $(function() {
+    $( "#blue" ).slider({
+      range: "min",
+      value: {{ theme.schedule }},
+      min: 0,
+      max: 100,
+      slide: function( event, ui ) {
+        $( "#amount" ).text(ui.value+'%');
+      }
+    });
+    $( "#amount" ).text($( "#blue" ).slider( "value" ) +'%');
+
+    $('#themedesc').show();     // 显示主题指南
+    $('#wmd-input').css('height', '150px');
+    // 加载评论
+    comment();
+    $("#wmd-input").val('');
+    $('#ceping').parent('li').show();
+  });
+   // 更改进度
+function changeSchedule(id){
+    var schedule = $('#amount').text();
+    if(schedule){
+        schedule = schedule.split('%')[0];
+        var url = '/manage/theme/changeSchedule/';
+        $.post(url,{'id':id, 'schedule':schedule}, function(data){
+            var r = data.evalJson();
+            if(r.response == 'ok'){
+                $('#msg_box').html(r.data);
+                $('#General').modal('toggle');
+
+            }else{
+                alert('系统出错了……');
+            }
+        })
+    }
+}
+ // 加载评论
+  function comment() {
+      var url = '/codetheme/comment/';
+      $.post(url,{'id':{{theme.id}}}, function(data){
+          $('#comment').html(data);
+      })
+
+  }
+  // 回复
+  function reply(uid,uname){
+      $content = $("#wmd-input").val();
+      $("#wmd-input").val($content+'@'+uname+'\r');
+  }
+
+  </script>
+{% endblock %}

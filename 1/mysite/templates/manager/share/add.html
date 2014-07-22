@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<form class="form-signin" role="form" action="/manage/share/add/" method='post'>{% csrf_token %}
+        <h2 class="form-signin-heading">分享链接</h2>
+        {{ form.as_p }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">提 交</button>
+      </form>
+{% endblock %}

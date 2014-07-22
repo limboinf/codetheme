@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+
+      <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+          <li data-target="#carousel-example-generic" data-slide-to="1" class=""></li>
+          <li data-target="#carousel-example-generic" data-slide-to="2" class=""></li>
+          <li data-target="#carousel-example-generic" data-slide-to="3" class=""></li>
+          <li data-target="#carousel-example-generic" data-slide-to="4" class=""></li>
+
+        </ol>
+        <div class="carousel-inner">
+          <div class="item active">
+              <img src="/site_media/img/1.jpg" width="1140" height="500" alt=""/>
+            <div class="carousel-caption">
+                  <h2>一.明确的方向和目标</h2>
+                  <p>在学习新的技术时，我们最怕的就是一脸茫然，不知从何下手，一会Google这，一会翻翻那。我希望能够提供给大家一个明确学习方向，学习内容，学习要点的平台，于是乎这个站就蹦出来了。<b>它山之石，可以攻玉</b>
+                  在借鉴他人学习思路后，对我们自己也是一个指南，我们也可以从他人制定theme后贴上来的博客总结链接，学到更多知识。所以Codetheme定位了<b><code>高效</code>，<code>明确</code>,<code>专注</code>，</b>。这里推荐阅读<b>
+                          <b><a href="http://www.vaikan.com/daily-routine-of-a-4-hour-programmer/">每天工作4小时的程序员</a></b>
+                    </b>
+                  </p>
+            </div>
+          </div>
+
+          <div class="item">
+              <img src="/site_media/img/2.jpg" width="1140" height="500" alt=""/>
+            <div class="carousel-caption" style="color: #000000">
+                  <h2>二.写博的思维导图</h2>
+                  <p>技术的深度往往在于深入，总结和反思，这也是写博的重要性，但本平台不提供写博，只提供写博的<code>思路</code>，<code>要点</code>，或<code>导图</code>。因为在写出一篇好的博文的时候，框架组织能力必不可少，东一句西一句，总会有些让人觉得不知所云。CodeTheme提供了一个可分享社区化的整理创作思路平台。
+                  <b>这里推荐阅读： <a href="http://chuansongme.com/n/439776" target="_blank">如何画出一张属于你的脑图——我学习思维导图的过程（1）</a> </b>
+                  </p>
+            </div>
+          </div>
+
+          <div class="item">
+              <img src="/site_media/img/3.jpg" width="1140" height="500" alt=""/>
+            <div class="carousel-caption" style="color: #003333">
+                <h2>三.翻译技术文档的前奏</h2>
+                <p>我想这对于翻译E文来说是再好不过了，给出你待翻译的章节列表，给出一个具体的时间段去完成你的翻译工作吧，让小伙伴们翘首期盼你的翻译成果，独乐了不如众乐乐。</p>
+
+            </div>
+          </div>
+
+            <div class="item">
+              <img src="/site_media/img/4.jpg" width="1140" height="500" alt=""/>
+            <div class="carousel-caption">
+                 <h2>四.对自我的约束</h2>
+                 <p>你会想，能对人有啥约束呢？我想它的约束就是让你<code>摆脱懒散</code>，<code>拖延症</code>,<code>目标涣散</code>,如果你注册了这个并且发布了规定时间段的编程计划（学习计划），如果到了规定时间自己贴不出劳动成果，就有点说不过去啦。。 </p>
+
+            </div>
+          </div>
+
+            <div class="item">
+              <img src="/site_media/img/5.jpg" width="1140" height="500" alt=""/>
+            <div class="carousel-caption" style="color: #003333">
+                  <h2>五.广结好友</h2>
+                  <p>找到与你志同道合的朋友，一块去研究某个方向的技术，一块去学习总结。.</p>
+                    <hr/>
+                    <b style="color: #c04b4b; font-size: 16px">我试图说服我你陪我一起玩这个，但语言表达浅显，望客官留步啊！</b>
+
+            </div>
+          </div>
+
+        </div>
+        <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+      </div>
+
+    <hr/>
+    <!-- 多说评论框 start -->
+ <div class="ds-thread" data-thread-key="1" data-title="关于CodeTheme" data-url="/about/">
+ </div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"codetheme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function(){
+            $('.carousel').carousel({
+              interval: 4000
+            })
+        })
+    </script>
+
+{% endblock %}

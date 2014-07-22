@@ -1,0 +1,11 @@
+<!--个人用户信息-->
+  {% for obj in recent_user %}
+  <a class="pull-left recent_user" href="/manage/user/{{ obj.id }}/" data-toggle="tooltip" data-placement="top" data-original-title="{{ obj.username }}">
+    <img class="media-object img-circle" src="{{ obj.avatar }}" width="40" height="40" style="margin: 3px;">
+  </a>
+  {% endfor %}
+<script>
+    $(function(){
+         $('.pull-left.recent_user').tooltip('hide');
+    })
+</script>

@@ -1,0 +1,43 @@
+{% extends 'base_index.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+       <img src="/site_media/img/tc.jpg" alt="" class="img-thumbnail" width="300"/>
+    </div>
+    <div class="col-md-8">
+        <div class="alert alert-warning">
+            <h4>尽情的吐槽吧</h4>
+            <div class="small_hr">
+                <p>1.希望给点建议吧</p>
+                <p>2.哪里垃圾点哪里</p>
+                <p>3.使用过程中遇到了问题，BUG等，在这里提交吧。</p>
+                <p>4.如果您对这个网站感兴趣可注册，我们一起发展。</p>
+                <p>5.如果对网站源码感兴趣，可在底部Github中Fork一份(Django1.5+Python2.7)</p>
+                <p>6.如果您对这个玩意不太明白，可移步到 <a href="/about/">About</a></p>
+                <p>7.由于这个网站是这两周下班后熬夜开发的，难免粗糙，不到之处还望谅解和指点</p>
+
+            </div>
+            <hr/>
+            <small>在下面多说评论框中提交反馈，加载的有点慢，稍等等等……</small>
+        </div>
+    </div>
+</div>
+ <!-- 多说评论框 start -->
+ <div class="ds-thread" data-thread-key="2" data-title="反馈" data-url="/codetheme/feedback/">
+ </div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"codetheme"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+{% endblock %}

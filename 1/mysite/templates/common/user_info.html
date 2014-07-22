@@ -1,0 +1,22 @@
+<!--个人用户信息-->
+<div class="media">
+  <a class="pull-left" href="#">
+    <img class="media-object img-circle" width="80" height="80" src="{{ user.avatar }}">
+  </a>
+  <div class="media-body">
+    <h4 class="media-heading">{{ user.username }}</h4>
+        <a href="/manage/themeManage/">主题({{ theme }})</a>&nbsp;|
+        <a href="/manage/share/list/">分享({{ share }})</a>
+  </div>
+</div>
+<hr/>
+<p>
+
+        <a href="/manage/user/{{ user.id }}/?type=1">谁爱的我({{ loveyou }})</a>&nbsp;|
+        <a href="/manage/user/{{ user.id }}/?type=2">我爱的童鞋({{ youlove }})</a>
+ </p>
+<p>
+
+        <a href="/codetheme/lovedtheme/">我爱的主题({{ mylove }})</a>&nbsp;&nbsp;|
+        <a href="/manage/user/ms/">信息{% if request.session.ms %}(<b class="text-danger">{{ request.session.ms }}条未读</b>){% else %}(0){% endif %}</a>
+</p>

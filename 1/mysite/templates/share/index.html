@@ -1,0 +1,54 @@
+{% extends 'base_index.html' %}
+{% load pagination_tags %}
+{% load mytags %}
+{% autopaginate share 20 %}
+{% block content %}
+
+
+<p class="text-right"><a href="/manage/share/add/" class="btn btn-warning">分享新链接</a></p>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+    <form class="input-group" style="width: 50%;" method="get" onclick="{%  url 'share_list' %}">
+        <input type="text" class="form-control" name="title">
+        <span class="input-group-btn" placeholder="搜索标题">
+          <input class="btn btn-default" type="submit" placeholder="搜个索">
+        </span>
+    </form>
+        <hr/>
+    {% for obj in share %}
+    <div class="media">
+      <a class="pull-left" href="#">
+        <img class="media-object img-circle" width="50" height="50" src="{{ obj.getUser.avatar }}" alt="...">
+      </a>
+      <div class="media-body">
+        <strong>{{ obj.getUser.username }} 于 <span class="small">{{ obj.add_date|date:'Y-m-d H:i:s'|fun }} 分享链接</span></strong>
+        <p> <a href="{{ obj.url }}" target="_blank">{{ obj.title }}</a>&nbsp;&nbsp;&nbsp;
+            {% if user.is_authenticated %}{% if user.id == obj.user %}<a class="label label-danger" href="javascript:;" onclick="delshare({{ obj.id }}, this)">删除</a>{% endif %}{% endif %}
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+
+    </div>
+</div>
+
+
+{% paginate %}
+{% endblock %}
+{% block js %}
+    <script>
+        function delshare(id,elem){
+            if(confirm('确定删除吗？')){
+                $.post('/manage/share/del/', {'id':id}, function (data) {
+                    var r = data.evalJson();
+                    if(r.response == 'ok'){
+                        $(elem).parent().remove();
+                    }else{
+                        alert('Oh，Fuck bug.');
+                    }
+                })
+            }
+        }
+    </script>
+{% endblock %}

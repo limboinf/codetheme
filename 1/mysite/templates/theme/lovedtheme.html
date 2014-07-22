@@ -1,0 +1,39 @@
+{% extends 'base_index.html' %}
+{% load pagination_tags %}
+{% load mytags %}
+{% block content %}
+<!--热门主题-->
+        <div class="row">
+        <p class="alert alert-warning">我关注的主题：{% if not themes %} <b>暂无</b> {% endif %}</p>
+        {% autopaginate themes %}
+        {% for obj in themes %}
+        <div class="media">
+          <a class="pull-left" href="/manage/user/{{ obj.theme.user }}/">
+            <img class="media-object img-circle" src="{{ obj.avatar }}" width="80" height="80">
+          </a>
+          <div class="media-body">
+             <div class="thumbnail {% if obj.theme.status == 1 %}warning{% elif obj.theme.status == 2 %}success{% endif %}">
+              <div class="caption">
+                <p><!--标题.类别-->
+                    <strong>
+                        <a href="/codetheme/{{ obj.theme.id }}/">{{ obj.theme.title }}</a>
+                        <a href="/codetheme/type/{{ obj.theme.type }}/" class="label label-warning navbar-text navbar-right">{{ obj.theme.getType.name }}</a>
+                    </strong>
+                </p>
+                <small>{{ obj.theme.summary|cut_title:'200' }}</small>
+                <p class="small_hr">
+                    作者：<a href="/codetheme/user/{{ obj.theme.user }}/">{{ obj.theme.getUser.username }}</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;热度：{{ obj.theme.counts }}℃
+                    &nbsp;&nbsp;&nbsp;&nbsp;关注度：{{ obj.theme.getLove }}
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        {% endfor %}
+        </div>
+    {% paginate %}
+
+    {% endblock %}
