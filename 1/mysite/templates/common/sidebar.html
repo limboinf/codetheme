@@ -1,3 +1,27 @@
+<!--节点-->
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">全站导航</h3>
+  </div>
+  <div class="panel-body" id="navside">
+      <a href=""><span class="label label-primary">Python</span></a>
+      <a href=""><span class="label label-primary">Django</span></a>
+      <a href=""><span class="label label-primary">Linux</span></a>
+      <a href=""><span class="label label-primary">Mysql</span></a>
+      <a href=""><span class="label label-primary">Js</span></a>
+      <a href=""><span class="label label-primary">Redis</span></a>
+      <a href=""><span class="label label-primary">MongoDB</span></a>
+      <a href=""><span class="label label-primary">Git</span></a>
+      <a href=""><span class="label label-primary">Web开发</span></a>
+      <a href=""><span class="label label-primary">部署</span></a>
+      <a href=""><span class="label label-primary">Nginx</span></a>
+      <a href=""><span class="label label-primary">算法</span></a>
+      <a href=""><span class="label label-primary">扯淡</span></a>
+      <a href=""><span class="label label-primary">反馈</span></a>
+      <a href=""><span class="label label-primary">其他</span></a>
+  </div>
+</div>
+
 {% if user.is_authenticated %}{# 用户未登录状态 #}
 <!--个人用户信息-->
 <div class="panel panel-default">
@@ -8,6 +32,17 @@
 
       </div>
 </div>
+{% else %}
+    <!--最近加入的用户-->
+ <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">最近加入的用户<small style="float: right"><a href="/codetheme/user/list/">more</a></small></h3>
+  </div>
+  <div class="panel-body" id="recent_user">
+
+  </div>
+</div>
+
 {% endif %}
 
 <!--主题介绍-->
@@ -23,31 +58,3 @@
 </div>
 
 
-
-<!--最近加入的用户-->
- <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">最近加入的用户<small style="float: right"><a href="/codetheme/user/list/">more</a></small></h3>
-  </div>
-  <div class="panel-body" id="recent_user">
-
-  </div>
-</div>
-
-
-
-<!--精华主题前15条-->
-<div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title"><span id="hot_month"></span>月份热门主题 <small style="float: right" ><a href="/codetheme/hot/">more</a></small></h3>
-      </div>
-      <div class="panel-body" id="hot_themes"></div>
-</div>
-
-<!--最近分享前15条-->
- <div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">最近分享链接<small style="float: right"><a href="/share/">more</a></small></h3>
-  </div>
-  <div class="panel-body" id="recent_share"></div>
-</div>

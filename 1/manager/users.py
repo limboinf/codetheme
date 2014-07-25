@@ -8,13 +8,6 @@ from mysite.models import Signal, LoveUser
 from common.form import AdminSignalForm, PasswordForm, AvatarForm
 from django.db.models import Q
 
-def userSuccess(request, id):
-    """用户注册成功跳转页面"""
-    context = {}
-    context['id'] = id
-    return render(request, 'manager/user/user_success.html', context)
-
-
 
 def userInfo(request, id):
     """用户信息"""

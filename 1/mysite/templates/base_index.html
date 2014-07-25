@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta property="wb:webmaster" content="2212f77a057befd5" />
-    <title>编程主题</title>
+    <title>Python研究社</title>
     <link rel="shortcut icon" href="/site_media/code.ico" type="image/icon">
     <link rel="icon" href="/site_media/code.ico" type="image/icon">
     <link href="/site_media/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -23,15 +23,6 @@
   <body>
    {% include 'common/head.html' %}
     <div class="container main">
-        {% if not user.is_authenticated and request.path == '/' %}{# 用户未登录状态 #}
-        <div class="alert alert-warning alert-dismissable">
-        <h2>网站正在改版中，新功能，新方向。敬请期待！</h2>
-        <!--<p>
-          <a class="btn btn-lg btn-primary" href="/login/" role="button">Go on&nbsp;&raquo;</a>
-        </p>
-        -->
-        </div>
-        {% endif %}      {# 用户已登陆状态 #}
         <div class="row">
             <!--左侧-->
             <div class="col-md-9">{% block content %}{% endblock %}</div>
@@ -47,8 +38,6 @@
     <li style="height:50px"><a id="reply" href="/codetheme/feedback/" target="_blank"></a></li>
   </ul>
 
-
-
     {% include 'common/dialog.html' %}
     {% include 'common/footer.html' %}
 
@@ -60,11 +49,10 @@
 <script>
     $(function(){
         // 异步加载
-        getHotTheme();
-        getRecentShare();
-        getRecentUser();
         {% if user.is_authenticated %}{# 用户未登录状态 #}
             getUser();
+        {% else %}
+            getRecentUser();
         {% endif %}
         // 弹出框
         $('#myModal, #noMaser, #General').modal('hide');
@@ -106,20 +94,7 @@
             $('#recent_user').html(data);
         })
     }
-    // 获取精华主题
-    function getHotTheme(){
-        var url = '/codetheme/get_hot_theme/';
-        $.post(url, function(data){
-            $('#hot_themes').html(data);
-        })
-    }
-    // 获取最近分享
-    function getRecentShare(){
-        var url = '/codetheme/get_recent_share/';
-        $.post(url, function(data){
-            $('#recent_share').html(data);
-        })
-    }
+
 </script>
 {% block js %}{% endblock %}
   </body>

@@ -11,7 +11,6 @@ import markdown
 class Type(models.Model):
     """分类"""
     name = models.CharField(max_length=100)
-    user = models.IntegerField()
     add_date = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
@@ -24,23 +23,12 @@ class Type(models.Model):
 
 class Theme(models.Model):
     """编程主题"""
-    TYPE = (
-        (0, u'未进行'),
-        (1, u'进行中'),
-        (2, u'已完成'),
-        (3, u'任务失败'),
-    )
     title = models.CharField(max_length=100)
     user = models.IntegerField()
     type = models.IntegerField(default=0)
-    summary = models.CharField(max_length=500, null=True)
     content = wmd_models.MarkDownField()
     content_show = wmd_models.MarkDownField(u'正文显示', null=True)
-    start_date = models.DateField()
-    end_date = models.DateField()
     add_date = models.DateTimeField()
-    status = models.IntegerField(default=0, choices=TYPE)
-    schedule = models.IntegerField(default=0)   # 进度
     is_great = models.IntegerField(default=0)   # 是否精华
     counts = models.IntegerField(default=0)     # 点击率
     def __unicode__(self):
@@ -100,21 +88,6 @@ class ThemeTag(models.Model):
         db_table = 'theme_tag'
 
 
-class Node(models.Model):
-    """思维树图"""
-    obj = models.ForeignKey(Theme)                  # 编程主题id
-    title = models.CharField(max_length=100)
-    url = models.URLField(null=True)                # 外战锚点链接
-    deep = models.IntegerField()                    # 当前节点的深度
-    parent_id = models.IntegerField()               # 父ID
-    sequence = models.IntegerField(default=1)       # 排序(数值愈大越靠前)
-    add_date = models.DateTimeField(auto_now=True)
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        db_table = 'node'
 
 
 

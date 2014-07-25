@@ -8,13 +8,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">编程主题</a>
+          <a class="navbar-brand" href="/">Python研究社 <span class="text-muted" style="font-size: 11px">专注于Python</span></a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav" id="webnav">
-            <li class="active" id="codetheme"><a href="/">CodeTheme</a></li>
-            <li id="share"><a href="/share/">Share</a></li>
-            <li id="about"><a href="/about/">About</a></li>
+            <li class="active" id="codetheme"><a href="/">首页</a></li>
+            <li id="share"><a href="/share/">热门</a></li>
+            <li id="about"><a href="/share/">分享</a></li>
+            <li id="about"><a href="/share/">标签</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_active %}
@@ -25,26 +26,20 @@
                 </a>
               </li>
                  <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">后台设置<b class="caret"></b></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">快捷操作<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/manage/addtheme/">发布主题</a></li>
-                <li><a href="/manage/share/add/">分享链接</a></li>
+                <li><a href="/manage/">个人主页</a></li>
+                  <li><a href="/manage/addtheme/">发帖</a></li>
+                <li><a href="/manage/share/add/">分享</a></li>
                 <li class="divider"></li>
-                <li><a href="/manage/">进入后台</a></li>
                 <li><a href="/manage/user/{{ user.id }}/">用户资料</a></li>
                 <li><a href="/manage/user/pwd/">更改密码</a></li>
-                <!--<li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-                -->
               </ul>
             </li>
                 <li><a href="/logout/">退出</a></li>
             {% else %}
                 <li><a href="/login/">登录</a></li>
-                <li><a href="/login/weibo/"><img src="http://img.t.sinajs.cn/t4/appstyle/open/images/website/loginbtn/loginbtn_03.png"></a></li>
+                <li style="display: none"><a href="/login/weibo/"><img src="http://img.t.sinajs.cn/t4/appstyle/open/images/website/loginbtn/loginbtn_03.png"></a></li>
                 <li><a href="/register/">注册</a></li>
             {% endif %}
           </ul>

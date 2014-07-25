@@ -145,3 +145,7 @@ li{list-style:none;}
 #ceping{background:url(../img/ceping.png) repeat scroll 0% 0% transparent;}
 #ceping:hover{background:url(../img/cepinged.png) repeat scroll 0% 0% transparent;}
 .red{ color:red}
+
+/*sibar nav*/
+#navside a{margin-bottom:5px;padding-bottom: 2px;display: inline-block;width: auto;}
+#navside a:hover{text-decoration: none;}

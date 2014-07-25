@@ -110,6 +110,7 @@ class RegisterForm(forms.Form):
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         self.user = None
+        self.email = None
         super(RegisterForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -124,7 +125,6 @@ class RegisterForm(forms.Form):
         if pwd2 == pwd and len(pwd) < 6:
             raise forms.ValidationError(u'密码不能小于6位')
         # 用户注册
-        # type = -1表示首次
         avatar = random.choice(range(35))
         avatar = '/site_media/avatar/%s.jpg' % avatar
         # 生成用户并验证
@@ -134,12 +134,15 @@ class RegisterForm(forms.Form):
         else:
             username = ValidUs(username[0])
             self.user = MyUser.objects.create_user(email=email, username=username, password=pwd, type=-1, avatar=avatar).id
+            self.email = email
         return data
 
     def get_user(self):
         """获取用户实例"""
         return self.user
 
+    def get_email(self):
+        return self.email
 
 
 class PasswordForm(forms.Form):

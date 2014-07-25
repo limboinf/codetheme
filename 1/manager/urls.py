@@ -17,7 +17,6 @@ urlpatterns = patterns('manager.views',
 
 #user
 urlpatterns += patterns('manager.users',
-    url(r'^userGreat/(?P<id>\d+)/$', 'userSuccess', name='userSuccess'),       # 用户注册成功
     url(r'^user/(?P<id>\d+)/$', 'userInfo', name='userInfo'),       # 用户信息
     url(r'^user/pwd/$', 'changePwd', name='changePwd'),             # 修改密码
     url(r'^user/set_avatar/$', 'setAvatar', name='setAvatar'),             # 修改头像
@@ -34,4 +33,20 @@ urlpatterns += patterns('manager.myshare',
     url(r'^share/add/$', 'add', name='add'),          # 发布
     url(r'^share/list/$', 'list', name='share_list'),          # 链接列表
     url(r'^share/del/$', 'shareDel', name='share_del'),          # 链接列表
+)
+
+#admin
+urlpatterns += patterns('manager.super',
+    url(r'^admin/$', 'superAdmin', name='superAdmin'),          # 管理员主页
+    url(r'^admin/type/$', 'type', name='type'),                 # 分类管理
+    url(r'^admin/msg/$', 'msg', name='msg'),                    # 公告管理
+    url(r'^admin/user/$', 'users', name='users'),               # 用户管理
+    url(r'^admin/top/$', 'tops', name='tops'),                  # 帖子管理
+)
+
+# common 通用
+urlpatterns += patterns('manager.common',
+    url(r'^common/add/$', 'add', name='add'),                          # 公共添加
+    url(r'^common/del/$', 'del_', name='del_'),                         # 公共删除
+    url(r'^common/update/$', 'update', name='update'),                    # 公共更新
 )

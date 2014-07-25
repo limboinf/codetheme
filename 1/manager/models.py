@@ -48,10 +48,8 @@ class MyUser(AbstractBaseUser):
     username = models.CharField(max_length=50, unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    type = models.IntegerField(default=0)                   # 类型，0本站，1微博登录
+    type = models.IntegerField(default=0)                   # 类型，0本站，1微博登录,-1:尚未通过邮箱验证
     sex = models.IntegerField(default=1)                    # sex
-    uid = models.CharField(max_length=50, null=True)                    # weibo uid
-    access_token = models.CharField(max_length=100, null=True)          # weibo access_token
     url = models.URLField(null=True)                            # 个人站点
     desc = models.CharField(max_length=2000, null=True)         # 个人信息简介
     avatar = models.CharField(max_length=500, null=True)        # 头像

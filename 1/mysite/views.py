@@ -9,6 +9,7 @@ from django.conf import settings
 from manager.models import MyUser
 from share.models import Share
 from common import ajax
+from common.superEmail import superMail
 from common.sqldata import SelectAllSqlByColumns
 from common.superweibo import SupserWeibo
 import simplejson as json
@@ -103,8 +104,13 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request, request.POST)
         if form.is_valid():
-            user_id = form.get_user()
-            return HttpResponseRedirect('/manage/userGreat/%s/' %user_id)
+            email = list(form.get_email())
+            # 发送邮件激活
+            subject = u'Python研究社邮箱验证'
+            html = '<p>Welcome!</p>'
+            s = superMail(email)
+            if s.sendEmail():
+                return HttpResponseRedirect('/')
 
         context['form'] = form
     else:
