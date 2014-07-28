@@ -34,6 +34,9 @@ class Mymiddleware(object):
         # 信息提醒
         user = request.user
         if user.is_authenticated():
+            if user.type == -1 and not path.startswith('/account/tip/') and not path.startswith('/logout/'):
+                return HttpResponseRedirect('/account/tip/')
+
             signal = Signal.objects.filter(who=user.id, status=0).count()   # 所有未读消息
             signal_obj_list = Signal.objects.filter(who=user.id, type=0).values_list('obj', flat=True)
             sys_signal_list = Signal.objects.filter(who=0, status=0).values_list('id', flat=True)  # 所有系统消息

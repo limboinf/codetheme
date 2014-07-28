@@ -75,14 +75,6 @@ class LoginForm(forms.Form):
         """是否勾选了自动登录"""
         return self.auth_login
 
-    def get_user_is_first(self):
-        """获取用户是否是第一次登录"""
-        is_first = False
-        if self.user_cache and self.user_cache.type == -1:
-            is_first = True
-            self.user_cache.type == 0
-            self.user_cache.save()
-        return is_first
 
 
 
@@ -111,6 +103,7 @@ class RegisterForm(forms.Form):
         self.request = request
         self.user = None
         self.email = None
+        self.token = None
         super(RegisterForm, self).__init__(*args, **kwargs)
 
     def clean(self):
@@ -133,16 +126,25 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError(u'邮箱格式不对')
         else:
             username = ValidUs(username[0])
-            self.user = MyUser.objects.create_user(email=email, username=username, password=pwd, type=-1, avatar=avatar).id
+            import datetime, hashlib
+            h = hashlib.md5()
+            h.update(str(datetime.datetime.now()))
+            token = h.hexdigest()
+            self.user = MyUser.objects.create_user(email=email, username=username, password=pwd, type=-1, avatar=avatar, token=token).id
             self.email = email
+            self.token = token
+
         return data
 
-    def get_user(self):
+    def get_user_id(self):
         """获取用户实例"""
         return self.user
 
     def get_email(self):
         return self.email
+
+    def get_token(self):
+        return self.token
 
 
 class PasswordForm(forms.Form):

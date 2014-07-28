@@ -59,7 +59,7 @@ class Theme(models.Model):
 
     def getType(self):
         """获取类型"""
-        return Type.objects.get(pk=self.type, user=self.user)
+        return Type.objects.get(pk=self.type)
 
 
 

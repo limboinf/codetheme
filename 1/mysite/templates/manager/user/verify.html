@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if is_ok == 1 %}
+<div class="alert alert-success">
+<h1>邮箱激活成功!</h1>
+<p>请 <a href="/login/">登陆</a></p>
+</div>
+{% else %}
+  <div class="alert alert-danger">
+    <h1>邮箱激活失败!</h1>
+    <p>重新激活或联系管理员<a href="mailto:xinxinyu2011@163.com">xinxinyu2011#163.com</a></p>
+  </div>
+{% endif %}
+{% endblock %}

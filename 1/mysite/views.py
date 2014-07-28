@@ -20,16 +20,8 @@ from django.shortcuts import get_object_or_404
 from django.core.cache import cache
 
 def home(request):
-    """网站首页."""
     context = {}
-    user = request.user
-    is_active = True
-    if user.is_authenticated():
-        is_active = False
-    # 编程主题
-    themes = Theme.objects.all().order_by('-id')
-    context['themes'] = themes
-    context['is_active'] = is_active
+    context['themes'] = Theme.objects.all().order_by('-id')
     return render(request, 'index.html', context)
 
 
@@ -44,9 +36,6 @@ def login_(request):
                 login(request, user)
                 if form.get_auto_login():       # set session
                     request.session.set_expiry(None)
-                if form.get_user_is_first():     # 判断用户是否首次登录
-                    user_id = form.get_user_id()
-                    return HttpResponseRedirect('/manage/user/%s/' % user_id)
                 return HttpResponseRedirect('/')
         context['form'] = form
 
@@ -104,13 +93,21 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request, request.POST)
         if form.is_valid():
-            email = list(form.get_email())
+            email = [form.get_email()]
+            uid=  form.get_user_id()
+            token = form.get_token()
             # 发送邮件激活
             subject = u'Python研究社邮箱验证'
-            html = '<p>Welcome!</p>'
-            s = superMail(email)
+            html = """<p><b>亲爱的用户，欢迎加入Python研究社!</b></p>
+            <p>请在7天内点击点击下面的链接完成邮件验证：<p>
+            <p><a href="http://codetheme.sinaapp.com/account/verify/%s/%s/">http://codetheme.sinaapp.com/account/verify/%s/%s/</a></p>
+            <p>如果以上链接无法点击，请将上面的地址复制到你的浏览器(如chrome)的地址栏进入,如果找不到请到邮件垃圾箱里翻翻.</p>
+            <p>如果激活不成功，您可以致信 <a href="mailto:xinxinyu2011@163.com">xinxinyu2011@163.com</a>，标题为“用户验证”。</p>
+            """ %(token, uid, token, uid)
+            s = superMail(email, subject, html)
             if s.sendEmail():
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/account/tip/')
+
 
         context['form'] = form
     else:
@@ -118,9 +115,28 @@ def register(request):
     return render(request, 'theme/register.html', context)
 
 
-def about(request):
-    """关于"""
-    return render(request, 'about.html')
+def comshow(request):
+    dic = {
+        '/account/tip/':'manager/user/account_tip.html',
+        '/about/':'about.html',
+        '/codetheme/feedback/':'theme/feedback.html',
+    }
+    path = request.path
+    for k,v in dic.items():
+        if path.startswith(k):
+            return render(request, v)
+
+    return HttpResponseRedirect('/')
+
+def verify(request, token='', uid=''):
+    """verify email"""
+    is_ok = 0
+    if token and uid and MyUser.objects.filter(id=uid, token=token).exists():
+        MyUser.objects.filter(id=uid).update(type=0)
+        is_ok = 1
+    context = {}
+    context['is_ok'] = is_ok
+    return render(request, 'manager/user/verify.html', context)
 
 
 
@@ -333,7 +349,3 @@ def comment(request):
         context['counts'] = len(context['comments'])
         return render(request, 'theme/comment.html', context)
 
-
-def feedback(request):
-    """反馈"""
-    return render(request, 'theme/feedback.html')

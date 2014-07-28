@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
             if kwargs.get('sex', None): user.sex = kwargs['sex']
             if kwargs.get('is_active', None): user.is_active=kwargs['is_active']
             if kwargs.get('uid', None): user.uid=kwargs['uid']
-            if kwargs.get('access_token', None): user.access_token=kwargs['access_token']
+            if kwargs.get('token', None): user.token=kwargs['token']
             if kwargs.get('url', None): user.url=kwargs['url']
             if kwargs.get('desc', None): user.desc=kwargs['desc']
             if kwargs.get('avatar', None): user.avatar=kwargs['avatar']
@@ -53,6 +53,7 @@ class MyUser(AbstractBaseUser):
     url = models.URLField(null=True)                            # 个人站点
     desc = models.CharField(max_length=2000, null=True)         # 个人信息简介
     avatar = models.CharField(max_length=500, null=True)        # 头像
+    token = models.CharField(max_length=500)                    # 验证
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
