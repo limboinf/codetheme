@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta property="wb:webmaster" content="2212f77a057befd5" />
+    <title>编程主题</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--
+        <link rel="stylesheet" href="http://lib.sinaapp.com/js/bootstrap/3.0.0/css/bootstrap-theme.min.css"/>
+    -->
+    <link rel="shortcut icon" href="/site_media/code.ico" type="image/icon">
+    <link rel="icon" href="/site_media/code.ico" type="image/icon">
+    <link href="/site_media/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/site_media/css/main.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    {% block css %}{% endblock %}
+  </head>
+
+  <body>
+
+   {% include 'common/head.html' %}
+    <div class="container main">
+        {% block content %}{% endblock %}
+    </div> <!-- /container -->
+
+    {% include 'common/dialog.html' %}
+    {% include 'common/footer.html' %}
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script src="/site_media/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/site_media/js/common.js"></script>
+    <script type="text/javascript" src="/site_media/artDialog4.1.6/jquery.artDialog.addSkin.js?skin=white"></script>
+    <script src="/site_media/js/jquery.jbasicext.js"></script>
+
+    {% block js %}
+        <script>
+        $(function(){
+            // 弹出框
+            $('#myModal, #noMaser, #General').modal('hide');
+        })
+        </script>
+    {% endblock %}
+  </body>
+</html>

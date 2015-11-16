@@ -1,0 +1,73 @@
+{% extends 'base_index.html' %}
+{% load pagination_tags %}
+{% load mytags %}
+{% block content %}
+<!--热门主题-->
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-5">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="javascript:;">所有主题  &nbsp;&nbsp;<span class="small">颜色标识：浅黄表示进行中；草绿表示圆满完成；玫红表示任务超时；无色表示尚未进行</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-5">
+          <p class="navbar-text navbar-right"><a href="{% if not user.is_authenticated %}javascript:;{% else %}/manage/addtheme/{% endif %}" {% if not user.is_authenticated  %} data-toggle="modal"  data-target="#myModal" {% endif %} class="label label-warning">发布</a></p>
+        </div>
+    </nav>
+
+        {% autopaginate themes %}
+        {% for obj in themes %}
+ 
+<div class="thumbnail {% if obj.status == 1 %}warning{% elif obj.status == 2 %}success{% endif %}">
+              <div class="caption">
+                <p><!--标题.类别-->
+                    <strong>
+                        <a class="theme_title" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ obj.title }}" href="/codetheme/{{ obj.id }}/">{{ obj.title }}</a>
+                        <a href="/codetheme/type/{{ obj.type }}/"><span class="badge pull-right it" data-toggle="tooltip" data-placement="top" title="" data-original-title="类别">{{ obj.getType.name }}</span></a>
+                    </strong>
+                </p>
+                <!--简介-->
+                <p>{{ obj.summary|cut_title:'300' }}</p>
+                <!--进度-->
+                <div class="progress" data-toggle="tooltip" data-placement="top" title="" data-original-title="完成进度 {{ obj.schedule }}%">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ obj.schedule }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ obj.schedule }}%"></div>
+                </div>
+                <!--脚注信息-->
+                <div>
+                    <a class="{% if user.is_authenticated and user.id in obj.getLoveObj %}btn btn-success btn-xs{% else %}btn btn-warning btn-xs{% endif %}" {% if user.is_authenticated %}onclick="LoveIt({{ obj.id }}, this)"{% else %} data-toggle="modal"  data-target="#myModal"{% endif %}>
+                      <span class="glyphicon glyphicon-star"></span>(<span id="love_{{ obj.id }}">{{ obj.getLove }}</span>人)
+                    </a>
+                    {% if obj.getTags %}&nbsp;&nbsp;{% for i in obj.getTags %}<a href="/codetheme/tag/{{ i.tag.id }}/" class="label label-danger small">{{ i.tag.name }}</a> {% endfor %}{% endif %}
+                </div>
+                <!--用户信息-->
+                <p><span class="navbar-right" style=""><img src="{{ obj.getUser.avatar }}" class="img-circle" width="30" height="30" alt=""/>&nbsp;&nbsp;<a href="/manage/user/{{ obj.getUser.id }}/" class="text-muted small">{{ obj.getUser.username }}</a></span></p>
+               <br/>
+              </div>
+            </div>
+         
+        {% endfor %}
+
+    {% paginate %}
+
+    {% endblock %}
+
+    <!--右侧-->
+    {% block side %}
+
+    {% endblock %}
+
+{% block js %}
+    <script src="/site_media/js/index.js"></script>
+    <script>
+    $(function(){
+        $('.badge.pull-right.it').tooltip('hide');
+        $('.progress, .theme_title').tooltip('hide');
+        $('#myModal').modal('hide');
+        // 异步加载
+
+    })
+    </script>
+{% endblock %}

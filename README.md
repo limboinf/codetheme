@@ -1,7 +1,7 @@
 codetheme
 =========
-**正在改版中..实时更新程序!**
 
+**已经是最新源码**
 
 线上地址:[http://ipic.beginman.cn/](http://ipic.beginman.cn/)
 
